@@ -9,7 +9,6 @@ public class EnemyController : MonoBehaviour
 
     void Start()
     {
-        GetComponent<Renderer>().material.color = Color.red;
         animator = GetComponent<Animator>();
     }
 
