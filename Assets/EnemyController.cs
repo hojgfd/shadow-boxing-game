@@ -6,6 +6,8 @@ public class EnemyController : MonoBehaviour
     public float damage = 10f;
 
     private Animator animator;
+    public Transform player;
+    
 
     void Start()
     {
@@ -14,7 +16,11 @@ public class EnemyController : MonoBehaviour
 
     void Update()
     {
-        // You could add enemy AI here (e.g., chase player).
+        if (player != null)
+        {
+            // Make this object face the target
+            transform.LookAt(player);
+        }
     }
 
     public void TakeDamage(float amount)

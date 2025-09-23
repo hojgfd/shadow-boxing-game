@@ -13,6 +13,9 @@ public class ModelRunner : MonoBehaviour
     [Header("Player")]
     public PlayerController playerController; // drag your PlayerController object here
 
+    [Header("Run Model")]
+    public bool runModel; // drag your PlayerController object here
+
     // Adjust to your model input shape (check in Netron)
     public int inputWidth = 224;
     public int inputHeight = 224;
@@ -28,28 +31,33 @@ public class ModelRunner : MonoBehaviour
 
     void Update()
     {
-        if (cameraInput.webcam == null || !cameraInput.webcam.isPlaying)
-            return;
+        if (runModel)
+        {
+            if (cameraInput.webcam == null || !cameraInput.webcam.isPlaying)
+                return;
 
-        // Capture current frame from webcam
-        Texture2D frame = new Texture2D(cameraInput.webcam.width, cameraInput.webcam.height, TextureFormat.RGB24, false);
-        frame.SetPixels32(cameraInput.webcam.GetPixels32());
-        frame.Apply();
+            // Capture current frame from webcam
+            Texture2D frame = new Texture2D(cameraInput.webcam.width, cameraInput.webcam.height, TextureFormat.RGB24, false);
+            frame.SetPixels32(cameraInput.webcam.GetPixels32());
+            frame.Apply();
 
-        // Run inference
-        int prediction;
-        float[] probabilities = Predict(frame, out prediction);
+            // Run inference
+            int prediction;
+            float[] probabilities = Predict(frame, out prediction);
 
-        // Log probabilities and predicted class
-        Debug.Log("Probabilities: " + string.Join(", ", probabilities));
-        Debug.Log("Predicted class: " + prediction);
+            // Log probabilities and predicted class
+            Debug.Log("Probabilities: " + string.Join(", ", probabilities));
+            Debug.Log("Predicted class: " + prediction);
 
-        if(prediction == 0){
-            playerController.Punch();
+            if (prediction == 0)
+            {
+                playerController.Punch();
+            }
+
+            // Cleanup temp texture
+            Destroy(frame);
         }
         
-        // Cleanup temp texture
-        Destroy(frame);
     }
 
     // Returns probabilities and sets predicted class via out parameter
