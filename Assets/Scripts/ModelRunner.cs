@@ -3,60 +3,79 @@ using Unity.Barracuda;
 
 public class ModelRunner : MonoBehaviour
 {
+    [Header("Model")]
     public NNModel modelAsset;           // Drag your ONNX/Barracuda model here
     private IWorker worker;
 
-    public CameraScript cameraInput;      // Reference to the script that handles the webcam
+    [Header("Input")]
+    public CameraScript cameraInput;     // Reference to webcam script
+
+    [Header("Player")]
+    public PlayerController playerController; // drag your PlayerController object here
+
+    // Adjust to your model input shape (check in Netron)
+    public int inputWidth = 224;
+    public int inputHeight = 224;
+
+    
 
     void Start()
     {
-        // Load the model and create a worker for inference
+        // Load model and create worker
         var model = ModelLoader.Load(modelAsset);
         worker = WorkerFactory.CreateWorker(WorkerFactory.Type.Auto, model);
     }
 
     void Update()
     {
-        if (cameraInput.webcam == null || !cameraInput.webcam.isPlaying) return;
+        if (cameraInput.webcam == null || !cameraInput.webcam.isPlaying)
+            return;
 
-        // Capture the current webcam frame
-        Texture2D frame = new Texture2D(cameraInput.webcam.width, cameraInput.webcam.height);
-        frame.SetPixels(cameraInput.webcam.GetPixels());
+        // Capture current frame from webcam
+        Texture2D frame = new Texture2D(cameraInput.webcam.width, cameraInput.webcam.height, TextureFormat.RGB24, false);
+        frame.SetPixels32(cameraInput.webcam.GetPixels32());
         frame.Apply();
 
         // Run inference
-        int prediction = Predict(frame);
+        int prediction;
+        float[] probabilities = Predict(frame, out prediction);
 
-        // Print prediction in real-time
-        Debug.Log("Predicted Class Index: " + prediction);
+        // Log probabilities and predicted class
+        Debug.Log("Probabilities: " + string.Join(", ", probabilities));
+        Debug.Log("Predicted class: " + prediction);
 
-        //// Optional: Map prediction to actions here
-        //switch (prediction)
-        //{
-        //    case 0: MoveLeft(); break;
-        //    case 1: MoveRight(); break;
-        //    case 2: Jump(); break;
-        //    default: Idle(); break;
-        //}
+        if(prediction == 0){
+            playerController.Punch();
+        }
+        
+        // Cleanup temp texture
+        Destroy(frame);
     }
 
-    public int Predict(Texture2D frame)
+    // Returns probabilities and sets predicted class via out parameter
+    public float[] Predict(Texture2D frame, out int predictedClass)
     {
-        // Preprocess frame to match model input (resize & normalize)
-        Tensor input = Preprocessor.Preprocess(frame, 224, 224);
+        // Preprocess input to correct size + normalization
+        Tensor input = Preprocessor.Preprocess(frame, inputWidth, inputHeight);
 
-        // Run the model
+        // Run inference
         worker.Execute(input);
         Tensor output = worker.PeekOutput();
 
-        // Find the index with the highest confidence
-        int bestIndex = ArgMax(output.ToReadOnlyArray());
+        // Extract raw results
+        float[] logits = output.ToReadOnlyArray();
+
+        // Apply softmax to get probabilities
+        float[] probs = Softmax(logits);
+
+        // Get predicted class
+        predictedClass = ArgMax(probs);
 
         // Dispose tensors to free memory
         input.Dispose();
         output.Dispose();
 
-        return bestIndex;
+        return probs;
     }
 
     private int ArgMax(float[] arr)
@@ -74,14 +93,29 @@ public class ModelRunner : MonoBehaviour
         return index;
     }
 
+    private float[] Softmax(float[] logits)
+    {
+        float maxLogit = float.NegativeInfinity;
+        foreach (var l in logits)
+            if (l > maxLogit) maxLogit = l;
+
+        float sumExp = 0f;
+        float[] expValues = new float[logits.Length];
+        for (int i = 0; i < logits.Length; i++)
+        {
+            expValues[i] = Mathf.Exp(logits[i] - maxLogit); // subtract max for numerical stability
+            sumExp += expValues[i];
+        }
+
+        float[] probs = new float[logits.Length];
+        for (int i = 0; i < logits.Length; i++)
+            probs[i] = expValues[i] / sumExp;
+
+        return probs;
+    }
+
     void OnDestroy()
     {
         worker.Dispose();
     }
-
-    //// Example placeholder actions
-    //void MoveLeft() { /* implement movement */ }
-    //void MoveRight() { /* implement movement */ }
-    //void Jump() { /* implement jump */ }
-    //void Idle() { /* implement idle */ }
 }

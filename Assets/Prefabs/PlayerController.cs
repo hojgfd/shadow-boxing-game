@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void Punch()
+    public void Punch()
     {
         animator.SetTrigger("punch");
         float distance = Vector3.Distance(transform.position, enemy.position);
