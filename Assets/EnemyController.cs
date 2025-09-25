@@ -7,11 +7,17 @@ public class EnemyController : MonoBehaviour
 
     private Animator animator;
     public Transform player;
-    
+    private Rigidbody rb;
 
     void Start()
     {
         animator = GetComponent<Animator>();
+        rb = GetComponent<Rigidbody>();
+
+        if (rb != null)
+        {
+            rb.useGravity = false;
+        }
     }
 
     void Update()
@@ -41,7 +47,7 @@ public class EnemyController : MonoBehaviour
         if (player != null)
         {
             player.TakeDamage(damage);
-            animator.SetTrigger("punch");
+            animator.SetTrigger("jab");
             Debug.Log("Enemy hit player!");
         }
     }

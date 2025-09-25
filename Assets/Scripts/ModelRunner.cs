@@ -49,9 +49,23 @@ public class ModelRunner : MonoBehaviour
             Debug.Log("Probabilities: " + string.Join(", ", probabilities));
             Debug.Log("Predicted class: " + prediction);
 
+            //MODEL NOT IMPLEMENTED WITH HOOK YET.
+            //switch (prediction)
+            //{
+            //    case 0:
+            //        playerController.Jab();
+            //        break;
+            //    case 1:
+            //        playerController.Hook();
+            //        break;
+            //    case 2:
+            //        //idle
+            //        break;
+            //}
+
             if (prediction == 0)
             {
-                playerController.Punch();
+                playerController.Jab();
             }
 
             // Cleanup temp texture
