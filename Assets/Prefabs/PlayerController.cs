@@ -26,6 +26,15 @@ public class PlayerController : MonoBehaviour
     [Header("Enemy Transform")]
     public Transform enemy;
 
+    [Header("Hook Sound effect")]
+    public AudioClip hookSFX;
+
+    [Header("Jab Sound effect")]
+    public AudioClip jabSFX;
+
+    [Header("SFX Volume")]
+    public float sfxVolume;
+
     private Animator animator;
     private Rigidbody rb;
     private bool canPunch = true;
@@ -81,6 +90,7 @@ public class PlayerController : MonoBehaviour
             EnemyController enemyController = enemy.GetComponent<EnemyController>();
             if (enemyController != null)
             {
+                SoundManager.instance.PlaySoundFXClip(jabSFX, transform, 1f);
                 enemyController.TakeDamage(jabDamage);
                 Debug.Log("Player punched enemy!");
             }
@@ -103,6 +113,7 @@ public class PlayerController : MonoBehaviour
             EnemyController enemyController = enemy.GetComponent<EnemyController>();
             if (enemyController != null)
             {
+                SoundManager.instance.PlaySoundFXClip(hookSFX, transform, 1f);
                 enemyController.TakeDamage(hookDamage);
                 Debug.Log("Player punched enemy!");
             }
