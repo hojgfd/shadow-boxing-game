@@ -44,11 +44,8 @@ public class PlayerController : MonoBehaviour
         GetComponent<Renderer>().material.color = Color.blue;
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
-
-        if (rb != null)
-        {
-            rb.useGravity = false;
-        }
+        GameObject enemy = GameObject.FindGameObjectWithTag("Enemy");     
+        Physics2D.IgnoreCollision(enemy.GetComponent<Collider2D>(), GetComponent<Collider2D>());
     }
 
     void Update()
@@ -63,7 +60,7 @@ public class PlayerController : MonoBehaviour
         {
             transform.position += direction * moveSpeed * Time.deltaTime;
         }
-
+        
         // Look towards enemy
         transform.rotation = Quaternion.LookRotation(direction);
 
@@ -105,7 +102,7 @@ public class PlayerController : MonoBehaviour
         if (!canPunch) return; // Prevent spamming during cooldown
 
         canPunch = false;
-        animator.SetTrigger("hook");
+        animator.SetTrigger("elbowpunch");
 
         float distance = Vector3.Distance(transform.position, enemy.position);
         if (distance <= punchRange)

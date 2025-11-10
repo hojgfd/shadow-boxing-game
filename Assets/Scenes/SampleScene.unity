@@ -1156,6 +1156,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 7276860964119258828, guid: a7d8cb5538f2c8842849130e4618f490, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1271,6 +1275,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: LocalPlayer
       objectReference: {fileID: 0}
+    - target: {fileID: 2269270902116012911, guid: ab5cdc0a291f0f246bbf9cfcfd9f01fb, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 3405690605873806410, guid: ab5cdc0a291f0f246bbf9cfcfd9f01fb, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -1321,6 +1329,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6924341248554455091, guid: ab5cdc0a291f0f246bbf9cfcfd9f01fb, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6924341248554455091, guid: ab5cdc0a291f0f246bbf9cfcfd9f01fb, type: 3}
+      propertyPath: m_ConstrainProportionsScale
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -1387,8 +1399,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3783385753939022413, guid: 4a3fbefcf76d01541818a7beb1198b99, type: 3}
       propertyPath: runModel
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3783385753939022413, guid: 4a3fbefcf76d01541818a7beb1198b99, type: 3}
+      propertyPath: modelAsset
+      value: 
+      objectReference: {fileID: 5022602860645237092, guid: e202d432be52c2a45abccb7490e1e8e2, type: 3}
     - target: {fileID: 3783385753939022413, guid: 4a3fbefcf76d01541818a7beb1198b99, type: 3}
       propertyPath: cameraInput
       value: 

@@ -2358,6 +2358,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5557662455664821858}
   - component: {fileID: 1237596885838615605}
+  - component: {fileID: 5563599939009346960}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -2397,11 +2398,38 @@ MonoBehaviour:
   m_GameObject: {fileID: 7276860964119258828}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ea978c69d349594cbe87ff42352b398, type: 3}
+  m_Script: {fileID: 11500000, guid: 8a39cbc9e85fb4d43ba63ee4eb6d7644, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyController
   health: 100
-  damage: 10
+  moveSpeed: 4.5
+  punchDamage: 15
+  punchRange: 2
+  punchCooldown: 1.5
+  enemyPunchTriggerName: EnemyPunch
+  player: {fileID: 0}
+--- !u!95 &5563599939009346960
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7276860964119258828}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: db3bc3c6b26671244a85bd279213ea38, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 1
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &7458205329181379612
 GameObject:
   m_ObjectHideFlags: 0

@@ -19,7 +19,7 @@ public class ModelRunner : MonoBehaviour
     // Adjust to your model input shape (check in Netron)
     public int inputWidth = 224;
     public int inputHeight = 224;
-
+    public Transform player;
     
 
     void Start()
@@ -27,6 +27,15 @@ public class ModelRunner : MonoBehaviour
         // Load model and create worker
         var model = ModelLoader.Load(modelAsset);
         worker = WorkerFactory.CreateWorker(WorkerFactory.Type.Auto, model);
+
+        GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
+        if (playerObject != null)
+        {
+            player = playerObject.transform;
+        } 
+
+        playerController = player.GetComponent<PlayerController>();
+
     }
 
     void Update()
@@ -46,26 +55,19 @@ public class ModelRunner : MonoBehaviour
             float[] probabilities = Predict(frame, out prediction);
 
             // Log probabilities and predicted class
-            Debug.Log("Probabilities: " + string.Join(", ", probabilities));
-            Debug.Log("Predicted class: " + prediction);
+            //Debug.Log("Probabilities: " + string.Join(", ", probabilities));
+
 
             //MODEL NOT IMPLEMENTED WITH HOOK YET.
-            //switch (prediction)
-            //{
-            //    case 0:
-            //        playerController.Jab();
-            //        break;
-            //    case 1:
-            //        playerController.Hook();
-            //        break;
-            //    case 2:
-            //        //idle
-            //        break;
-            //}
-
-            if (prediction == 0)
+            switch (prediction)
             {
-                playerController.Jab();
+                case 0:
+                    Debug.Log("Predicted class: Jab");
+                    playerController.Jab();
+                    break;
+                case 1:
+                    Debug.Log("Predicted class: Ready");
+                    break;
             }
 
             // Cleanup temp texture
